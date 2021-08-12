@@ -45,6 +45,21 @@ void MainWindow::CameraSetup()
     setCentralWidget(CamWidget);
     VBoxlayout->addWidget(CameraViewfinder);
     CamWidget->setLayout(VBoxlayout);
+
+    recorder = new QMediaRecorder(Camera,this);
+    QVideoEncoderSettings settings = recorder->videoSettings();
+    settings.setResolution(640,480);
+    settings.setQuality(QMultimedia::VeryHighQuality);
+    settings.setFrameRate(30.0);
+    settings.setCodec("video/mp4");
+    recorder->setVideoSettings(settings);
+    recorder->setContainerFormat("mp4");
+
+    Camera->setCaptureMode(QCamera::CaptureVideo);
+    Camera->focus();
+
+
+
 }
 
 void MainWindow::List_keys(QListWidgetItem* item)
@@ -59,9 +74,14 @@ void MainWindow::List_keys(QListWidgetItem* item)
     }
     if (List->item(2) == item) {
         qDebug() << "Start Recording";
+        auto filename = QFileDialog::getSaveFileName(this, "Capture", "/", "video(*.mp4)");
+        //QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"),"/home/jana/untitled.png",tr("Images (*.png *.xpm *.jpg)"));
+        recorder->setOutputLocation(QUrl::fromLocalFile(filename));
+        recorder->record();
     }
     if (List->item(3) == item) {
         qDebug() << "Stop Recording";
+        recorder->stop();
     }
     if (List->item(4) == item) {
         qDebug() << "Moving forward";

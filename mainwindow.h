@@ -10,6 +10,7 @@
 #include <QCameraViewfinder>
 #include <QVBoxLayout>
 #include <QAction>
+#include <QMediaRecorder>
 
 class MainWindow : public QMainWindow
 {
@@ -30,6 +31,7 @@ private:
     QCameraViewfinder *CameraViewfinder;
     QCameraImageCapture *CameraImageCapture;
     QVBoxLayout *VBoxlayout;
+    QMediaRecorder *recorder;
 
 public slots:
     void List_keys(QListWidgetItem* item);
